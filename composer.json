@@ -20,7 +20,8 @@
         "drupal/core-project-message": "^9",
         "drupal/core-recommended": "^9",
         "drupal/core-vendor-hardening": "^9",
-        "drupal/redis": "^1.4"
+        "drupal/redis": "^1.4",
+        "drupal/tara": "^2.3"
     },
     "conflict": {
         "drupal/drupal": "*"
