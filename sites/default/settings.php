@@ -253,7 +253,7 @@ $databases = [];
 /**
  * Location of the site configuration files.
  *
- * The $settings['config_sync_directory'] specifies the location of file system
+ * The F$settings['config_sync_directory'] specifies the location of file system
  * directory used for syncing configuration data. On install, the directory is
  * created. This is used for configuration imports.
  *
@@ -783,4 +783,79 @@ $databases['default']['default'] = array (
   'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
   'driver' => 'mysql',
 );
-$settings['config_sync_directory'] = 'sites/default/files/config_qkLv1iKe-HXIB2W2Pu-AJWigHYafLEXgt4Ptdkf5rTotXTKxnycUs_5Ea2GT7IVK2i78IvHbOg/sync';
+$settings['config_sync_directory'] = 'sites/default/files/config_qkLv1iKe-HXIB2W2Pu-AJWigHYafLEXgt4Ptdkf5rTotXTKxnycUs_5Ea2GT7IVK2i78IvHbOg/sync'; 
+
+$conf['chq_redis_cache_enabled'] = TRUE;
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+$config['system.logging']['error_level'] = 'verbose';
+
+$redis_exists = class_exists('\Drupal\redis\Client\PhpRedis');
+$redis_server = 'redis';
+$redis_port = '6379';
+
+
+if ($redis_exists and $redis_server and $redis_port) {
+  $settings['redis.connection']['host'] = $redis_server;
+  $settings['redis.connection']['port'] = $redis_port;
+  $settings['redis.connection']['base'] = 8;
+  $settings['cache']['default'] = 'cache.backend.redis';
+
+// Apply changes to the container configuration to better leverage Redis.
+// This includes using Redis for the lock and flood control systems, as well
+// as the cache tag checksum. Alternatively, copy the contents of that file
+// to your project-specific services.yml file, modify as appropriate, and
+// remove this line.
+  $settings['container_yamls'][] = 'modules/contrib/redis/example.services.yml';
+
+// Allow the services to work before the Redis module itself is enabled.
+  $settings['container_yamls'][] = 'modules/contrib/redis/redis.services.yml';
+
+// Manually add the classloader path, this is required for the container cache bin definition below
+// and allows to use it without the redis module being enabled.
+  $class_loader->addPsr4('Drupal\\redis\\', 'modules/contrib/redis/src');
+
+// Use redis for container cache.
+// The container cache is used to load the container definition itself, and
+// thus any configuration stored in the container itself is not available
+// yet. These lines force the container cache to use Redis rather than the
+// default SQL cache.
+  $settings['bootstrap_container_definition'] = [
+    'parameters' => [],
+    'services' => [
+      'redis.factory' => [
+        'class' => 'Drupal\redis\ClientFactory',
+      ],
+      'cache.backend.redis' => [
+        'class' => 'Drupal\redis\Cache\CacheBackendFactory',
+        'arguments' => [
+          '@redis.factory',
+          '@cache_tags_provider.container',
+          '@serialization.phpserialize',
+        ],
+      ],
+      'cache.container' => [
+        'class' => '\Drupal\redis\Cache\PhpRedis',
+        'factory' => ['@cache.backend.redis', 'get'],
+        'arguments' => ['container'],
+      ],
+      'cache_tags_provider.container' => [
+        'class' => 'Drupal\redis\Cache\RedisCacheTagsChecksum',
+        'arguments' => ['@redis.factory'],
+      ],
+      'serialization.phpserialize' => [
+        'class' => 'Drupal\Component\Serialization\PhpSerialize',
+      ],
+    ],
+  ];
+}
+
+//if
+//(isset($conf['chq_redis_cache_enabled']) && 
+//$conf['chq_redis_cache_enabled'])
+//{
+//$settings['redis.connection']['interface'] = 'PhpRedis';
+//$settings ['cache'] ['default'] = 'cache.backend.redis';
+//$conf['cache_class_cache'] = 'Redis_cache';
+//}
