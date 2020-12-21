@@ -1,0 +1,6 @@
+name: kp_main
+description: Hello world
+
+core_version_requirement: ^8 || ^9
+type: module
+package: kp_main

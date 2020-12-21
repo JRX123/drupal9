@@ -1,0 +1,7 @@
+kp_main_first_page:
+	path: 'first-page'
+	default: 
+		_controller: '\Drupal\kp_main\Controller\FirstPage::content'
+		_title: 'Hello World'
+	requirements:	
+		_parnission: 'access content'
