@@ -7,10 +7,12 @@
 
 namespace Drupal\kp_main\Controller;
 
+
+
 /**
  * Provides route for our costum module.
  */
-class FirstPage{
+class FirstPage {
 
 	/**
 	* Display simple page.
@@ -20,4 +22,6 @@ class FirstPage{
 			'#markup' => 'Hello world',
 		);
 	}
+
+
 }

@@ -2,6 +2,14 @@ kp_main.first_page:
  path: 'first-page'
  defaults:
   _controller: '\Drupal\kp_main\Controller\FirstPage::content'
-  _title: 'Hello World'
+  _title: 'Hello World!!!'
  requirements:
   _permission: 'access content'
+
+kp_main.settings:
+  path: '/admin/config/media/kp_main/settings'
+  defaults:
+    _form: '\Drupal\kp_main\Form\kp_mainSettingsForm'
+    _title: 'kp_main Settings form'
+  requirements:
+    _permission: 'administer site configuration'
