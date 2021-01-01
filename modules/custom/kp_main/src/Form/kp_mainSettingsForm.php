@@ -5,24 +5,39 @@ namespace Drupal\kp_main\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
+/**
+ * Configure example settings for this site.
+ */
 class kp_mainSettingsForm extends ConfigFormBase{
 
+  /**
+   * {@intheritdoc}
+   */
   public function getFormId()
   {
-    // TODO: Implement getFormId() method.
     return 'kp_mainSettingsForm_admin_settings';
   }
 
+  /**
+   * {@intheritdoc}
+   */
   protected function getEditableConfigNames()
   {
-    // TODO: Implement getEditableConfigNames() method.
     return[
       'kp_main.settings',
     ];
   }
 
+  /**
+   * {@intheritdoc}
+   */
   public function  buildForm(array $form, FormStateInterface $form_state){
 
+    /**
+     * Config settings.
+     *
+     * @var string
+     */
     $config = $this->config('kp_main.settings');
 
     $form['kp_main_api_key'] = [
@@ -39,10 +54,16 @@ class kp_mainSettingsForm extends ConfigFormBase{
     return parent::buildForm($form, $form_state);
   }
 
+  /**
+   * {@intheritdoc}
+   */
   public function submitForm(array &$form, FormStateInterface $form_state)
   {
-    // TODO: Implement submitForm() method.
-    $this->configFactory->getEditable('kp_main.settings')->set('kp_main_api_key', $form_state->getValue('kp_main_api_key'))->set('kp_main_api_client_id', $form_state->getValue('kp_main_api_client_id'))->save();
+    $this->configFactory
+      ->getEditable('kp_main.settings')
+      ->set('kp_main_api_key', $form_state->getValue('kp_main_api_key'))
+      ->set('kp_main_api_client_id', $form_state->getValue('kp_main_api_client_id'))
+      ->save();
     parent::submitForm($form, $form_state);
   }
 
