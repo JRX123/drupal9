@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="848cc888-a06c-4b1b-9912-34e41102672e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/custom/kp_main/src/Form/kp_mainSettingsForm.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/custom/kp_main/src/Form/kp_mainSettingsForm.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +117,7 @@
       <workItem from="1608912747147" duration="2864000" />
       <workItem from="1609028266741" duration="192000" />
       <workItem from="1609093241320" duration="2721000" />
-      <workItem from="1609537688585" duration="1795000" />
+      <workItem from="1609537688585" duration="2396000" />
     </task>
     <servers />
   </component>
